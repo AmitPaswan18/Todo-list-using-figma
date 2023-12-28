@@ -6,6 +6,9 @@ export default {
       fontFamily: {
         sfpro: ["SF Pro", "Helvetica", "Arial", "sans-serif"],
       },
+      colors: {
+        skyblue: "#006CFF",
+      },
     },
   },
   plugins: [],

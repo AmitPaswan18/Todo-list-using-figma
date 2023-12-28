@@ -210,7 +210,12 @@ const TodoItems = () => {
             Today
           </div>
           <div className="w-[25px] h-[25px] relative top-[23px] left-[268px]">
-            <GrAddCircle onClick={handleActive} color="skyblue" size={25} />
+            <GrAddCircle
+              onClick={handleActive}
+              color="#006CFF"
+              className="font-bold"
+              size={25}
+            />
           </div>
         </div>
 
@@ -298,10 +303,10 @@ const TodoItems = () => {
                               </>
                             ) : (
                               <div className="flex w-[375px] flex-row lg:mx-2 lg:gap-2 gap-0 lg:flex-col">
-                                <div className="pl-2">
+                                <div className="pl-2 ">
                                   {filter === "all" ? (
                                     <Checkboxbutton
-                                      className=" h-[28px] w-[28px] appearance-none border-2 rounded-[50%] p-0  "
+                                      className=" h-[28px] w-[28px] border-2 rounded-[50%] p-0 align-middle"
                                       checked={checkedItems[index] || false}
                                       onChange={() =>
                                         handleCheckboxChange(index)
@@ -311,18 +316,22 @@ const TodoItems = () => {
                                 </div>
                                 <div
                                   id="protext"
-                                  className="md:text-sm pl-4 max-h-fit font-semibold ">
+                                  className="md:text-sm  pl-4 max-h-fit font-semibold ">
                                   {item.title}
                                 </div>
-                                {checkedItems[index] && filter == "all" ? (
-                                  <>
-                                    <span className="badge h-6 text-xs text-bg-success m-2">
-                                      Complete
-                                    </span>
-                                  </>
-                                ) : null}
                               </div>
                             )}
+
+                            <div className="h-10 w-10 ">
+                              {checkedItems[index] ? (
+                                <>
+                                  <li className="text-green-600 text-3xl pl-8"></li>
+                                </>
+                              ) : (
+                                <li className="text-red-600 text-3xl pl-8"></li>
+                              )}
+                            </div>
+
                             <div className="flex w-[75px] flex-col md:flex-row ml-4 ">
                               <>
                                 <RiDeleteBin5Fill
@@ -380,14 +389,14 @@ const TodoItems = () => {
                   <Button
                     type="text"
                     onClick={handleActiveSubmit}
-                    className="bg-white">
+                    className="bg-white text-skyblue">
                     {" "}
                     Cancel
                   </Button>
                   <Button
                     type="submit"
                     onClick={handleSubmit}
-                    className="bg-white font-medium">
+                    className="bg-white font-medium text-skyblue">
                     {" "}
                     Done
                   </Button>
