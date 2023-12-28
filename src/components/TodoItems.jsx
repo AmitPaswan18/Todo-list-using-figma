@@ -20,6 +20,7 @@ const TodoItems = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [checkedItems, setCheckedItems] = useState({});
   const [filter, setFilter] = useState("all");
+  const [isactive, setActive] = useState(false);
 
   const containerRef = useRef(null);
   const editInputRef = useRef(null);
@@ -84,6 +85,7 @@ const TodoItems = () => {
       setTodo([...todo, { title }]);
       saveTasks([...todo, { title }]);
       setTitle("");
+      setActive(false);
     }
   };
 
@@ -133,6 +135,13 @@ const TodoItems = () => {
     }
   };
 
+  const handleActive = () => {
+    setActive(true);
+  };
+  const handleActiveSubmit = () => {
+    setActive(false);
+  };
+
   useEffect(() => {
     loadTasks();
 
@@ -156,6 +165,7 @@ const TodoItems = () => {
         if (editIndex !== null) {
           handleEditSubmit(event);
         }
+
         cancelEdit();
       }
     };
@@ -169,7 +179,7 @@ const TodoItems = () => {
 
   return (
     <>
-      <div className=" h-[44px]  w-[375px] lg:hidden lg:w-full z-100 ">
+      <div className=" h-[44px] fixed top-0  w-[375px] lg:hidden lg:w-full z-50 ">
         <img
           className=" fixed top-[12px] left-[21px] w-[54px] h-[21px]"
           src={TimeStyle}></img>
@@ -192,177 +202,202 @@ const TodoItems = () => {
           alt=""
         />
       </div>
-
-      <div className="w-[375px] flex  h-[73px]">
-        <div className="w-[65px] text-3xl font-bold relative top-[16px] left-[16px] h-[41px]">
-          Today
+      <div className="w-[375px] relative top-[44px] h-[860px]">
+        <div className="w-[375px] flex  h-[73px]">
+          <div
+            id="today-title"
+            className="w-[65px] text-3xl font-bold relative top-[16px] left-[16px] h-[41px]">
+            Today
+          </div>
+          <div className="w-[25px] h-[25px] relative top-[23px] left-[268px]">
+            <GrAddCircle onClick={handleActive} color="skyblue" size={25} />
+          </div>
         </div>
-        <div className="w-[25px] h-[25px] relative top-[23px] left-[268px]">
-          <GrAddCircle color="skyblue" size={25} />
-        </div>
-      </div>
 
-      <div
-        className="lg:w-full  lg:h-screen "
-        ref={containerRef}
-        onClick={handleClick}>
         <div
-          id="scrollbar"
-          className="flex justify-center  lg:w-10/12 w-[375px] lg:w-max-96  flex-col items-center mx-auto  rounded-md lg:p-2">
-          <div className=" max-h-96 overflow-y-auto  w-[375px] flex justify-center lg:w-10/12  ">
-            {todo.length === 0 ? (
-              <>
-                <div className=" flex flex-col md:flex-col justify-evenly md:w-full md:z-10 lg:w-1/3  lg:ml-10  lg:h-3/6 sm:h-1/2 ">
-                  <div className="font-sans lg:font-extrabold  lg:text-3xl text-sm font-bold my-2">
-                    My Tasks
-                  </div>
-
-                  <div className=" text-md text-slate-500 opacity-40 py-2 ">
-                    {" "}
-                    You have No Task
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className=" left-10 lg:w-10/12 w-full max-h-fit">
-                <div className=" lg:w-7/12 w-[375px]">
-                  <div className="flex justify-center text-sm  mt-4  lg:gap-4 gap-2 md:text-lg">
-                    <RadioButton
-                      label="All"
-                      value="all"
-                      checked={filter === "all"}
-                      onChange={() => handleFilterChange("all")}
-                    />
-
-                    <RadioButton
-                      className=""
-                      label="Complete"
-                      value="complete"
-                      checked={filter === "complete"}
-                      onChange={() => handleFilterChange("complete")}
-                    />
-
-                    <label htmlFor="incomplete">
-                      <RadioButton
-                        label="Incomplete"
-                        value="incomplete"
-                        checked={filter === "incomplete"}
-                        onChange={() => handleFilterChange("incomplete")}
-                      />{" "}
-                    </label>
-                  </div>
-
-                  {isinputValid === false && (
-                    <div className="text-red-600">
-                      Please enter a valid task name
+          className="lg:w-full max-h-fit lg:h-screen "
+          ref={containerRef}
+          onClick={handleClick}>
+          <div
+            id="scrollbar"
+            className="flex justify-center  lg:w-10/12 w-[375px] lg:w-max-96  flex-col items-center mx-auto  rounded-md lg:p-2">
+            <div className=" max-h-96 overflow-y-auto  w-[375px] flex justify-center lg:w-10/12  ">
+              {todo.length === 0 ? (
+                <>
+                  <div className=" flex flex-col md:flex-col justify-evenly md:w-full md:z-10 lg:w-1/3  lg:ml-10  lg:h-3/6 sm:h-1/2 ">
+                    <div className="font-sans lg:font-extrabold  lg:text-3xl text-sm font-bold my-2">
+                      My Tasks
                     </div>
-                  )}
-                </div>
 
-                <div className="lg:mt-28">
-                  {filteredTodo().map((item, index) => (
-                    <div className=" max-h-fit" key={index}>
-                      <div className="flex lg:mx-2 lg:gap-2 gap-0 flex-col">
-                        <div
-                          ref={editIndex === index ? editInputRef : null}
-                          className="flex max-h-fit  my-2  w-full rounded-md justify-between lg:py-1 lg:px-1">
-                          {editIndex === index ? (
-                            <>
-                              <div className="flex w-[300px] flex-col">
-                                <form onSubmit={(e) => handleEditSubmit(e)}>
-                                  <input
-                                    id="inputbar"
-                                    ref={inputRef}
-                                    className="w-11/12 h-8 rounded-md p-2 m-2 text-black"
-                                    placeholder="Task..."
-                                    onChange={(e) =>
-                                      setTitleEdit(e.target.value)
-                                    }
-                                    onBlur={handleBlur}
-                                    value={titleEdit}
-                                  />
-                                </form>
-                              </div>
-                            </>
-                          ) : (
-                            <div className="flex w-[375px] flex-row lg:mx-2 lg:gap-2 gap-0 lg:flex-col">
-                              <div className="pl-2">
-                                {filter === "all" ? (
-                                  <Checkboxbutton
-                                    className=" h-[28px] w-[28px] appearance-none border-2 rounded-[50%] p-0  "
-                                    checked={checkedItems[index] || false}
-                                    onChange={() => handleCheckboxChange(index)}
-                                  />
+                    <div className=" text-md text-slate-500 opacity-40 py-2 ">
+                      {" "}
+                      You have No Task
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className=" left-10 lg:w-10/12 w-full max-h-fit">
+                  <div className=" lg:w-7/12 w-[375px]">
+                    <div className="flex justify-center text-sm font-semibold mt-4  lg:gap-4 gap-2 md:text-lg">
+                      <RadioButton
+                        label="All"
+                        value="all"
+                        checked={filter === "all"}
+                        onChange={() => handleFilterChange("all")}
+                      />
+
+                      <RadioButton
+                        className=""
+                        label="Complete"
+                        value="complete"
+                        checked={filter === "complete"}
+                        onChange={() => handleFilterChange("complete")}
+                      />
+
+                      <label className="px-2" htmlFor="Incomplete">
+                        <RadioButton
+                          label="Incomplete"
+                          value="incomplete"
+                          checked={filter === "incomplete"}
+                          onChange={() => handleFilterChange("incomplete")}
+                        />{" "}
+                      </label>
+                    </div>
+
+                    {isinputValid === false && (
+                      <div className="text-red-600">
+                        Please enter a valid task name
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="lg:mt-28">
+                    {filteredTodo().map((item, index) => (
+                      <div className=" max-h-fit" key={index}>
+                        <div className="flex lg:mx-2 lg:gap-2 gap-0 flex-col">
+                          <div
+                            ref={editIndex === index ? editInputRef : null}
+                            className="flex max-h-fit  my-2  w-full rounded-md justify-between lg:py-1 lg:px-1">
+                            {editIndex === index ? (
+                              <>
+                                <div className="flex w-[300px] flex-col">
+                                  <form onSubmit={(e) => handleEditSubmit(e)}>
+                                    <input
+                                      id="inputbar"
+                                      ref={inputRef}
+                                      className="w-10/12 h-8 rounded-md p-2 mt-2 ml-12 border-2 text-black"
+                                      placeholder="Task..."
+                                      onChange={(e) =>
+                                        setTitleEdit(e.target.value)
+                                      }
+                                      onBlur={handleBlur}
+                                      value={titleEdit}
+                                    />
+                                  </form>
+                                </div>
+                              </>
+                            ) : (
+                              <div className="flex w-[375px] flex-row lg:mx-2 lg:gap-2 gap-0 lg:flex-col">
+                                <div className="pl-2">
+                                  {filter === "all" ? (
+                                    <Checkboxbutton
+                                      className=" h-[28px] w-[28px] appearance-none border-2 rounded-[50%] p-0  "
+                                      checked={checkedItems[index] || false}
+                                      onChange={() =>
+                                        handleCheckboxChange(index)
+                                      }
+                                    />
+                                  ) : null}
+                                </div>
+                                <div
+                                  id="protext"
+                                  className="md:text-sm pl-4 max-h-fit font-semibold ">
+                                  {item.title}
+                                </div>
+                                {checkedItems[index] && filter == "all" ? (
+                                  <>
+                                    <span className="badge h-6 text-xs text-bg-success m-2">
+                                      Complete
+                                    </span>
+                                  </>
                                 ) : null}
                               </div>
-                              <div className="md:text-sm pl-4 h-[60px]  ">
-                                {item.title}
-                              </div>
-                              {checkedItems[index] && filter == "all" ? (
-                                <>
-                                  <span className="badge h-6 text-xs text-bg-success m-2">
-                                    Complete
-                                  </span>
-                                </>
-                              ) : null}
-                            </div>
-                          )}
-                          <div className="flex w-[75px] flex-col md:flex-row ">
-                            <>
-                              <RiDeleteBin5Fill
+                            )}
+                            <div className="flex w-[75px] flex-col md:flex-row ml-4 ">
+                              <>
+                                <RiDeleteBin5Fill
+                                  className="m-1"
+                                  color="red"
+                                  opacity={0.6}
+                                  size={18}
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => deleteTodo(index)}
+                                />
+                              </>
+
+                              <RiEditBoxLine
                                 className="m-1"
-                                color="red"
+                                ref={editInputRef}
                                 opacity={0.6}
                                 size={18}
                                 style={{ cursor: "pointer" }}
-                                onClick={() => deleteTodo(index)}
+                                onClick={() =>
+                                  editIndex === index
+                                    ? handleEditSubmit()
+                                    : editTodo(index)
+                                }
                               />
-                            </>
-
-                            <RiEditBoxLine
-                              className="m-1"
-                              ref={editInputRef}
-                              opacity={0.6}
-                              size={18}
-                              style={{ cursor: "pointer" }}
-                              onClick={() =>
-                                editIndex === index
-                                  ? handleEditSubmit()
-                                  : editTodo(index)
-                              }
-                            />
+                            </div>
                           </div>
+                          <div className="h-[1px] border-1 border-zinc-200 ml-[50px] w-[325px]"></div>
                         </div>
-                        <div className="h-[1px] border-1 border-zinc-200 ml-[50px] w-[325px]"></div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-          <div className=" max-h-fit flex  w-9/12 justify-center ">
-            <form
-              className="w-full lg:w-11/12"
-              name="todoform"
-              onSubmit={handleSubmit}>
-              <div className="text-white mr-8">
-                {" "}
-                <div className="flex flex-col w-full">
-                  <TaskInput
+              )}
+            </div>
+            {isactive == true ? (
+              <div className=" absolute top-[150px] border-2 bg-white rounded-md flex flex-col w-[340.62px] h-[297.24px] justify-center ">
+                <form
+                  className="h-[200px] w-full ml-4"
+                  name="todoform"
+                  onSubmit={handleSubmit}>
+                  {" "}
+                  <div className=" w-[87px] h-[41px] font-bold left-[30px] top-[109px] text-[18px] leading-[41px] tracking-[1%]">
+                    Add Todo
+                  </div>
+                  <div className="flex text-black">
+                    <TaskInput
+                      type="text"
+                      className="rounded-[10px] h-[148px] w-[298px] border-1 placeholder:text-start"
+                      onChange={(e) => setTitle(e.target.value)}
+                      value={title}
+                    />
+                  </div>
+                </form>
+                <div className=" flex justify-between ml-4 w-[298px] h-[44px] text-sky-600">
+                  <Button
                     type="text"
-                    className="w-full h-8 rounded-md p-2 my-2 text-black "
-                    placeholder="Task..."
-                    onChange={(e) => setTitle(e.target.value)}
-                    value={title}
-                  />
-                </div>
-                <div className="flex ">
-                  <Button color="#1864AB"> Add a Task</Button>
+                    onClick={handleActiveSubmit}
+                    className="bg-white">
+                    {" "}
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    onClick={handleSubmit}
+                    className="bg-white font-medium">
+                    {" "}
+                    Done
+                  </Button>
                 </div>
               </div>
-            </form>
+            ) : null}
           </div>
+        </div>
+        <div className="w-[375px] h-[34px] flex justify-center fixed">
+          <div className="h-[5px] w-[135px] bg-zinc-800"> </div>
         </div>
       </div>
     </>
