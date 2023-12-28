@@ -396,7 +396,7 @@ const TodoItems = () => {
             ) : null}
           </div>
         </div>
-        <div className="w-[375px] h-[34px] flex justify-center fixed">
+        <div className="w-[375px] h-[34px] flex justify-center fixed bottom-0">
           <div className="h-[5px] w-[135px] bg-zinc-800"> </div>
         </div>
       </div>
