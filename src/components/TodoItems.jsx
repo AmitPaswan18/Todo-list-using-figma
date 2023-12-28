@@ -6,7 +6,7 @@ import { GrAddCircle } from "react-icons/gr";
 import Checkboxbutton from "./common/Checkboxbutton";
 import Button from "./common/Button";
 import RadioButton from "./common/RadioButton";
-import TaskInput from "./common/TaskInput";
+import TaskInput from "./common/Taskinput";
 
 import signal from "./icons/signal.svg";
 import Wifi from "./icons/Wifi.svg";
