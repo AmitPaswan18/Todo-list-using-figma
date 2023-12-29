@@ -6,7 +6,6 @@ import { GrAddCircle } from "react-icons/gr";
 import Checkboxbutton from "./common/Checkboxbutton";
 import Button from "./common/Button";
 import RadioButton from "./common/RadioButton";
-import TaskInput from "./common/Taskinput";
 
 import signal from "./icons/signal.svg";
 import Wifi from "./icons/Wifi.svg";
@@ -41,6 +40,8 @@ const TodoItems = () => {
         return todo.filter((item, index) => checkedItems[index] === true);
       case "incomplete":
         return todo.filter((item, index) => checkedItems[index] !== true);
+      case "all":
+        return todo;
       default:
         return todo;
     }
@@ -230,8 +231,8 @@ const TodoItems = () => {
             <div className=" max-h-96 md:max-h-98 overflow-y-auto  w-[375px] flex justify-center md:w-11/12  ">
               {todo.length === 0 ? (
                 <>
-                  <div className=" flex flex-col md:flex-col justify-evenly md:w-full md:z-10 lg:w-1/3  lg:ml-10  lg:h-3/6 sm:h-1/2 ">
-                    <div className="font-sans lg:font-extrabold  lg:text-3xl text-sm font-bold my-2">
+                  <div className=" flex flex-col justify-evenly items-center md:w-full md:z-100   lg:h-3/6 sm:h-1/2 ">
+                    <div className="font-sans lg:font-extrabold  md:text-5xl text-sm font-bold my-2">
                       My Tasks
                     </div>
 
@@ -272,7 +273,6 @@ const TodoItems = () => {
                         />{" "}
                       </label>
                     </div>
-
                     {isinputValid === false && (
                       <div className="text-red-600">
                         Please enter a valid task name
@@ -327,7 +327,8 @@ const TodoItems = () => {
                             )}
 
                             <div className="h-10 w-10 pl-30">
-                              {checkedItems[index] ? (
+                              {checkedItems[index] == true &&
+                              filter === "all" ? (
                                 <>
                                   <li className="text-green-600 text-3xl pl-8"></li>
                                 </>
@@ -336,7 +337,7 @@ const TodoItems = () => {
                               )}
                             </div>
 
-                            <div className="flex w-[75px] flex-col md:flex-row ml-4 md:mt-2">
+                            <div className="flex w-[75px] flex-col md:flex-row ml-4 md:mt-1">
                               <>
                                 <RiDeleteBin5Fill
                                   className="m-1"
@@ -380,14 +381,6 @@ const TodoItems = () => {
                   <div className=" w-[87px] h-[41px] font-bold left-[30px] top-[109px] text-[18px] leading-[41px] tracking-[1%]">
                     Add Todo
                   </div>
-                  {/* <div className="flex text-black">
-                    <TaskInput
-                      type="text"
-                      className="rounded-[10px] h-[148px] w-[298px] border-1 placeholder:text-start"
-                      onChange={(e) => setTitle(e.target.value)}
-                      value={title}
-                    />
-                  </div> */}
                   <textarea
                     name="todoform"
                     id=""
