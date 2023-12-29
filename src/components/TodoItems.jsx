@@ -320,7 +320,7 @@ const TodoItems = () => {
                                 </div>
                                 <div
                                   id="protext"
-                                  className=" text-sm  pl-4 max-h-fit md:font-medium  font-thin font-sfpro md:text-lg">
+                                  className="  pl-4 max-h-fit md:font-medium font-sfpro md:text-lg">
                                   {item.title}
                                 </div>
                               </div>
